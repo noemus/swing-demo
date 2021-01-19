@@ -17,7 +17,6 @@ import java.awt.event.KeyListener;
 
 public class SuggestionPanel<T> {
     private final JTextComponent textComponent;
-//    private final DefaultListModel<AutocompleteValue> listModel = new DefaultListModel<>();
     private final JList<AutocompleteValue> list;
     private final JPopupMenu popupMenu;
     private final AutocompleteFilter<T> autocompleteFilter;
@@ -37,13 +36,6 @@ public class SuggestionPanel<T> {
         list = new JList<>();
         list.setBorder(BorderFactory.createEmptyBorder(0, 2, 5, 2));
         list.setFocusable(false);
-        list.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                final int firstIndex = e.getFirstIndex();
-                System.out.println("Selected index: " + firstIndex);
-            }
-        });
 
         popupMenu.add(list, BorderLayout.CENTER);
     }
@@ -99,32 +91,6 @@ public class SuggestionPanel<T> {
         return false;
     }
 
-    private String getSubWord(int position, String text) {
-        if (position < 0 || position > text.length()) {
-            return null;
-        }
-
-        int start = position;
-        if (position == text.length()) {
-            start--;
-        }
-
-        while (start > 0) {
-            if (Character.isLetter(text.charAt(start))) {
-                start--;
-            } else if (!Character.isWhitespace(text.charAt(start))) {
-                return null;
-            } else {
-                start++;
-                break;
-            }
-        }
-        if (start > position) {
-            return null;
-        }
-        return text.substring(start, position + 1);
-    }
-
     private int endOfWord(int position, String text) {
         if (position < 0 || position > text.length()) {
             return -1;
@@ -153,10 +119,7 @@ public class SuggestionPanel<T> {
             }
             start--;
         }
-        if (start > position) {
-            return position;
-        }
-        return start;
+        return Math.min(start, position);
     }
 
     private void showSuggestions(int position, String text) {
@@ -294,35 +257,10 @@ public class SuggestionPanel<T> {
     private final KeyListener autocompleteKeyListener = new KeyListener() {
         @Override
         public void keyTyped(KeyEvent e) {
-            if (!isActive()) {
-                return;
-            }
-//            if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-//                if (insertSelection()) {
-//                    e.consume();
-//                    int position = textComponent.getCaretPosition();
-//                    SwingUtilities.invokeLater(() -> {
-//                        try {
-//                            textComponent.getDocument().remove(position - 1, 1);
-//                        } catch (BadLocationException e1) {}
-//                    });
-//                }
-//            }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
-            if (!isActive()) {
-                return;
-            }
-
-//            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-//                moveDown();
-//                e.consume();
-//            } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-//                moveUp();
-//                e.consume();
-//            }
         }
 
         @Override
@@ -336,13 +274,6 @@ public class SuggestionPanel<T> {
             } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 if (insertSelection()) {
                     e.consume();
-                    int position = textComponent.getCaretPosition();
-                    SwingUtilities.invokeLater(() -> {
-//                        try {
-//                            int position = textComponent.getCaretPosition();
-//                            textComponent.getDocument().remove(position - 1, 1);
-//                        } catch (BadLocationException e1) {}
-                    });
                 }
             } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 hideSuggestion();
@@ -357,7 +288,8 @@ public class SuggestionPanel<T> {
                 return;
             }
 
-            if (!isAtWord(e.getDot())) {
+            int caretPosition = e.getDot();
+            if (caretPosition < insertionPosition || caretPosition > (insertionPosition + subWord.length())) {
                 hideSuggestion();
             }
         }
@@ -390,7 +322,7 @@ public class SuggestionPanel<T> {
         getDocument().addDocumentListener(autocompleteDocumentListener);
         System.out.println("Register key listener");
         textComponent.addKeyListener(autocompleteKeyListener);
-//        textComponent.addCaretListener(autocompleteCaretListener);
+        textComponent.addCaretListener(autocompleteCaretListener);
     }
 
     private void restoreListeners() {
@@ -402,7 +334,7 @@ public class SuggestionPanel<T> {
 //        }
 //        documentListeners = null;
 
-//        textComponent.removeCaretListener(autocompleteCaretListener);
+        textComponent.removeCaretListener(autocompleteCaretListener);
 //        if (caretListeners != null) {
 //            Arrays.stream(caretListeners).forEach(textComponent::addCaretListener);
 //        }
