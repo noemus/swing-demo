@@ -5,8 +5,6 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -281,7 +279,7 @@ public class SuggestionPanel<T> {
             }
         }
     };
-    private CaretListener autocompleteCaretListener = new CaretListener() {
+    private final CaretListener autocompleteCaretListener = new CaretListener() {
         @Override
         public void caretUpdate(CaretEvent e) {
             if (!isActive()) {
@@ -295,57 +293,18 @@ public class SuggestionPanel<T> {
         }
     };
 
-    private DocumentListener[] documentListeners;
-    private CaretListener[] caretListeners;
-    private KeyListener[] keyListeners;
-
-    private void saveListeners() {
-        final AbstractDocument document = getDocument();
-
-//        documentListeners = document.getListeners(DocumentListener.class);
-//        if (documentListeners != null) {
-//            Arrays.stream(documentListeners).forEach(document::removeDocumentListener);
-//        }
-//        caretListeners = textComponent.getCaretListeners();
-//        if (caretListeners != null) {
-//            Arrays.stream(caretListeners).forEach(textComponent::removeCaretListener);
-//        }
-//        keyListeners = textComponent.getKeyListeners();
-//        if (keyListeners != null) {
-//            Arrays.stream(keyListeners).forEach(textComponent::removeKeyListener);
-//        }
-    }
-
     private void initSuggestionKeyListener() {
-        saveListeners();
-
-        getDocument().addDocumentListener(autocompleteDocumentListener);
         System.out.println("Register key listener");
+        getDocument().addDocumentListener(autocompleteDocumentListener);
         textComponent.addKeyListener(autocompleteKeyListener);
         textComponent.addCaretListener(autocompleteCaretListener);
     }
 
     private void restoreListeners() {
-        final AbstractDocument document = getDocument();
-
-        document.removeDocumentListener(autocompleteDocumentListener);
-//        if (documentListeners != null) {
-//            Arrays.stream(documentListeners).forEach(document::addDocumentListener);
-//        }
-//        documentListeners = null;
-
-        textComponent.removeCaretListener(autocompleteCaretListener);
-//        if (caretListeners != null) {
-//            Arrays.stream(caretListeners).forEach(textComponent::addCaretListener);
-//        }
-//        caretListeners = null;
-
         System.out.println("Un-Register key listener");
+        getDocument().removeDocumentListener(autocompleteDocumentListener);
+        textComponent.removeCaretListener(autocompleteCaretListener);
         textComponent.removeKeyListener(autocompleteKeyListener);
-//        if (keyListeners != null) {
-//            Arrays.stream(keyListeners).forEach(textComponent::addKeyListener);
-//        }
-//        keyListeners = null;
     }
 
     public boolean isActive() {
