@@ -1,4 +1,4 @@
-package app.suggestions;
+package app;
 
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectFactory;
@@ -33,7 +33,7 @@ public class SwingScope implements Scope {
             Thread.currentThread().interrupt();
             throw new ApplicationContextException("Bean creation was interrupted", e);
         } catch (InvocationTargetException e) {
-            throw new BeanCreationException("Scoped instanctiation failed", e.getTargetException());
+            throw new BeanCreationException("Scoped instantiation failed", e.getTargetException());
         }
     }
 

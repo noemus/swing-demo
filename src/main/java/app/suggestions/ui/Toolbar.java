@@ -1,6 +1,6 @@
 package app.suggestions.ui;
 
-import app.suggestions.SwingComponent;
+import app.SwingComponent;
 import app.suggestions.api.TextUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 

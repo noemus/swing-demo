@@ -1,6 +1,6 @@
 package app.suggestions.ui;
 
-import app.suggestions.SwingComponent;
+import app.SwingComponent;
 import app.suggestions.api.TextUpdater;
 
 import javax.swing.*;
@@ -8,13 +8,10 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 @SwingComponent
 public class TextPane extends JPanel implements TextUpdater {
     private final JTextArea textArea;
-    private final List<String> tokens = new LinkedList<>();
     private final SuggestionPanel<CriteriaType> suggestion;
 
     private final DocumentListener documentListener = new DocumentListener() {

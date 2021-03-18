@@ -1,5 +1,6 @@
 package app.suggestions;
 
+import app.SwingScope;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,7 +11,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import static java.util.Collections.singletonMap;
 
 @Configuration
-@ComponentScan
+@ComponentScan("app.suggestions")
 @PropertySource("classpath:default.properties")
 public class AppConfig {
     @Bean

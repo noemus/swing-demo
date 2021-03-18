@@ -1,4 +1,4 @@
-package app.suggestions;
+package app;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
