@@ -1,6 +1,6 @@
-package app;
+package app.suggestions;
 
-import app.ui.MainFrame;
+import app.suggestions.ui.MainFrame;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

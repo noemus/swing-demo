@@ -1,6 +1,6 @@
-package app.ui;
+package app.suggestions.ui;
 
-import app.SwingComponent;
+import app.suggestions.SwingComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 

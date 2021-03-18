@@ -1,4 +1,4 @@
-package app.ui;
+package app.suggestions.ui;
 
 interface AutocompleteValue {
     String toString();

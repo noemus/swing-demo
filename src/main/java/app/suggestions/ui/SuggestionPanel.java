@@ -1,7 +1,6 @@
-package app.ui;
+package app.suggestions.ui;
 
 import javax.swing.*;
-import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -224,7 +223,7 @@ public class SuggestionPanel<T> {
 
             int pos = e.getOffset();
 
-            if (isAtWord(pos)) {
+            if (pos >= insertionPosition) {
                 showSuggestions(pos, textComponent.getText());
             } else {
                 hideSuggestion();
@@ -279,17 +278,14 @@ public class SuggestionPanel<T> {
             }
         }
     };
-    private final CaretListener autocompleteCaretListener = new CaretListener() {
-        @Override
-        public void caretUpdate(CaretEvent e) {
-            if (!isActive()) {
-                return;
-            }
+    private final CaretListener autocompleteCaretListener = e -> {
+        if (!isActive()) {
+            return;
+        }
 
-            int caretPosition = e.getDot();
-            if (caretPosition < insertionPosition || caretPosition > (insertionPosition + subWord.length())) {
-                hideSuggestion();
-            }
+        int caretPosition = e.getDot();
+        if (caretPosition < insertionPosition || caretPosition > (insertionPosition + subWord.length())) {
+            hideSuggestion();
         }
     };
 

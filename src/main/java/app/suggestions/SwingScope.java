@@ -1,4 +1,4 @@
-package app;
+package app.suggestions;
 
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectFactory;

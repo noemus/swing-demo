@@ -1,7 +1,7 @@
-package app.ui;
+package app.suggestions.ui;
 
-import app.SwingComponent;
-import app.api.TextUpdater;
+import app.suggestions.SwingComponent;
+import app.suggestions.api.TextUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;

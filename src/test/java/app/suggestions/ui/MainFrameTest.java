@@ -1,9 +1,8 @@
-package app.ui;
+package app.suggestions.ui;
 
-import app.Main;
+import app.suggestions.Main;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
-import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JPanelFixture;
 import org.junit.After;

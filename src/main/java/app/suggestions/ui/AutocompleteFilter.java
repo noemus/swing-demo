@@ -1,4 +1,4 @@
-package app.ui;
+package app.suggestions.ui;
 
 import java.util.stream.Stream;
 

@@ -1,4 +1,4 @@
-package app.ui;
+package app.suggestions.ui;
 
 @FunctionalInterface
 interface AutocompleteValueProvider<T> {
