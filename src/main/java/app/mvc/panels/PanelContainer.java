@@ -1,7 +1,6 @@
-package app.mvc.ui;
+package app.mvc.panels;
 
 import app.SwingComponent;
-import app.mvc.model.PanelModel;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @SwingComponent
-public class PanelContainer extends JPanel {
+public class PanelContainer extends JPanel implements PanelsUI {
     private final JPanel panel = new JPanel();
     private final ScrollPane scrollPane = new ScrollPane();
 
@@ -36,6 +35,7 @@ public class PanelContainer extends JPanel {
         panelModel.getPanels().forEach(this::addPanelInternal);
     }
 
+    @Override
     public void reset() {
         panel.removeAll();
 
@@ -43,13 +43,19 @@ public class PanelContainer extends JPanel {
         scrollPane.repaint();
     }
 
+    @Override
     public void addPanel(Color color) {
         addPanelInternal(color);
 
         scrollPane.revalidate();
         scrollPane.repaint();
 
-        listeners.forEach(listener -> listener.panelAdded(this));
+        listeners.forEach(PanelContainerListener::panelAdded);
+    }
+
+    @Override
+    public Component getComponent() {
+        return this;
     }
 
     public void addPanelContainerListener(PanelContainerListener listener) {
@@ -70,7 +76,7 @@ public class PanelContainer extends JPanel {
     }
 
     public interface PanelContainerListener {
-        void panelAdded(PanelContainer panelContainer);
-        void panelRemoved(PanelContainer panelContainer);
+        void panelAdded();
+        void panelRemoved();
     }
 }

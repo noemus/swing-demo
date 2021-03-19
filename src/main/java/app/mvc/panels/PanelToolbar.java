@@ -1,7 +1,7 @@
-package app.mvc.ui;
+package app.mvc.panels;
 
 import app.SwingComponent;
-import app.mvc.PanelController;
+import app.mvc.panels.PanelController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package app.mvc;
+package app.mvc.panels;
 
 public interface PanelController {
     void reset();

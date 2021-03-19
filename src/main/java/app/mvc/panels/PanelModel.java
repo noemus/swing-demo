@@ -1,4 +1,4 @@
-package app.mvc.model;
+package app.mvc.panels;
 
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package app.mvc.ui;
+package app.mvc.panels;
 
 import javax.swing.*;
 import java.awt.*;

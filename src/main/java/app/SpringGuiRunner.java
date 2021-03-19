@@ -20,20 +20,19 @@ public class SpringGuiRunner {
         return new SpringGuiRunner(configClasses);
     }
 
-    public <T extends SpringGuiApp> void run(Class<T> appClass) {
-        SwingUtilities.invokeLater(() -> {
-            try (ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(configClasses)) {
-                T app = context.getBean(appClass);
-                runInGui(app::start);
-            }
-        });
-    }
-
     public static void runInGui(Runnable action) {
         if (isEventDispatchThread()) {
             action.run();
         } else {
             invokeLater(action);
         }
+    }
+
+    public <T extends SpringGuiApp> void run(Class<T> appClass) {
+        SwingUtilities.invokeLater(() -> {
+            ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
+            context.registerShutdownHook();
+            context.getBean(appClass).start();
+        });
     }
 }
