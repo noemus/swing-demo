@@ -11,7 +11,7 @@ public class ColoredPanel extends JPanel {
 
     private final JPanel panel = new JPanel();
 
-    public ColoredPanel(Color color) {
+    public ColoredPanel(Color color, String label) {
         super(new BorderLayout());
         setPreferredSize(PANEL_SIZE);
         setMinimumSize(PANEL_SIZE);
@@ -24,6 +24,13 @@ public class ColoredPanel extends JPanel {
 
         panel.setOpaque(true);
         panel.setBackground(color);
+        panel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel.setToolTipText("Click to remove panel");
+
+        JLabel panelLabel = new JLabel(label);
+        panelLabel.setFont(new Font(panelLabel.getFont().getName(), Font.BOLD, 40));
+        panel.add(panelLabel, BorderLayout.CENTER);
+
         add(panel, BorderLayout.CENTER);
     }
 

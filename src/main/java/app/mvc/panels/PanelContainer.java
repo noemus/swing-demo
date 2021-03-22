@@ -23,9 +23,6 @@ public class PanelContainer extends JPanel implements PanelsUI {
     @Autowired
     private PanelModel panelModel;
 
-    @Autowired
-    private PanelController panelController;
-
     public PanelContainer() {
         super();
     }
@@ -95,11 +92,11 @@ public class PanelContainer extends JPanel implements PanelsUI {
     }
 
     private void addPanelInternal(Panel panel) {
-        ColoredPanel coloredPanel = new ColoredPanel(panel.color());
+        ColoredPanel coloredPanel = new ColoredPanel(panel.color(), panel.label());
         panels.put(panel, coloredPanel);
         container.add(coloredPanel);
 
-        coloredPanel.addPanelClickedListener(e -> panelController.removePanel(panel));
+        coloredPanel.addPanelClickedListener(e -> panelModel.removePanel(panel));
     }
 
     private void removePanelInternal(Panel panel) {
