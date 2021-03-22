@@ -32,17 +32,10 @@ public class MessagePanel extends JPanel implements MessageUI {
     @Override
     public void showMessage(Message message) {
         switch (message.type()) {
-            case ERROR:
-                messageLabel.setForeground(Color.RED);
-                break;
-            case WARNING:
-                messageLabel.setForeground(Color.ORANGE);
-                break;
-            case INFO:
-                messageLabel.setForeground(Color.DARK_GRAY);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + message.type());
+            case ERROR -> messageLabel.setForeground(Color.RED);
+            case WARNING -> messageLabel.setForeground(Color.ORANGE);
+            case INFO -> messageLabel.setForeground(Color.DARK_GRAY);
+            default -> throw new IllegalStateException("Unexpected value: " + message.type());
         }
         messageLabel.setText(message.text());
         messageLabel.setVisible(true);

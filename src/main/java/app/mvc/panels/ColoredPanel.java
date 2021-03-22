@@ -2,9 +2,14 @@ package app.mvc.panels;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 public class ColoredPanel extends JPanel {
     private static final Dimension PANEL_SIZE = new Dimension(100, 100);
+
+    private final JPanel panel = new JPanel();
 
     public ColoredPanel(Color color) {
         super(new BorderLayout());
@@ -17,9 +22,17 @@ public class ColoredPanel extends JPanel {
                 BorderFactory.createLineBorder(Color.BLACK)
         ));
 
-        JPanel comp = new JPanel();
-        comp.setOpaque(true);
-        comp.setBackground(color);
-        add(comp, BorderLayout.CENTER);
+        panel.setOpaque(true);
+        panel.setBackground(color);
+        add(panel, BorderLayout.CENTER);
+    }
+
+    public void addPanelClickedListener(Consumer<MouseEvent> clickHandler) {
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                clickHandler.accept(e);
+            }
+        });
     }
 }

@@ -6,18 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @SwingComponent
 public class PanelContainer extends JPanel implements PanelsUI {
-    private final JPanel panel = new JPanel();
+    private final JPanel container = new JPanel();
     private final ScrollPane scrollPane = new ScrollPane();
+
+    private final Map<Panel,ColoredPanel> panels = new HashMap<>();
 
     private final List<PanelContainerListener> listeners = new CopyOnWriteArrayList<>();
 
     @Autowired
     private PanelModel panelModel;
+
+    @Autowired
+    private PanelController panelController;
 
     public PanelContainer() {
         super();
@@ -27,8 +34,8 @@ public class PanelContainer extends JPanel implements PanelsUI {
     public void setup() {
         setLayout(new BorderLayout());
 
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-        scrollPane.add(panel);
+        container.setLayout(new BoxLayout(container, BoxLayout.LINE_AXIS));
+        scrollPane.add(container);
 
         add(scrollPane, BorderLayout.CENTER);
 
@@ -37,20 +44,36 @@ public class PanelContainer extends JPanel implements PanelsUI {
 
     @Override
     public void reset() {
-        panel.removeAll();
+        container.removeAll();
 
         scrollPane.revalidate();
         scrollPane.repaint();
     }
 
     @Override
-    public void addPanel(Color color) {
-        addPanelInternal(color);
+    public void addPanel(Panel panel) {
+        addPanelInternal(panel);
 
         scrollPane.revalidate();
         scrollPane.repaint();
 
         listeners.forEach(PanelContainerListener::panelAdded);
+    }
+
+    @Override
+    public void removePanel(Panel panel) {
+        removePanelInternal(panel);
+
+        container.revalidate();
+        container.repaint();
+
+        scrollPane.revalidate();
+        scrollPane.repaint();
+
+        revalidate();
+        repaint();
+
+        listeners.forEach(PanelContainerListener::panelRemoved);
     }
 
     @Override
@@ -71,8 +94,17 @@ public class PanelContainer extends JPanel implements PanelsUI {
         scrollPane.setScrollPosition(maximum, scrollPane.getVAdjustable().getValue());
     }
 
-    private void addPanelInternal(Color color) {
-        panel.add(new ColoredPanel(color));
+    private void addPanelInternal(Panel panel) {
+        ColoredPanel coloredPanel = new ColoredPanel(panel.color());
+        panels.put(panel, coloredPanel);
+        container.add(coloredPanel);
+
+        coloredPanel.addPanelClickedListener(e -> panelController.removePanel(panel));
+    }
+
+    private void removePanelInternal(Panel panel) {
+        ColoredPanel coloredPanel = panels.remove(panel);
+        container.remove(coloredPanel);
     }
 
     public interface PanelContainerListener {

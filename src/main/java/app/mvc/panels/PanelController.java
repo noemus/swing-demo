@@ -5,4 +5,5 @@ public interface PanelController {
     void load();
     void save();
     void newPanel();
+    void removePanel(Panel panel);
 }

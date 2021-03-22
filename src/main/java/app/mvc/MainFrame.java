@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,23 +37,30 @@ public class MainFrame extends JFrame implements SpringGuiApp {
     @Autowired
     private PanelContainer panelContainer;
 
+    private final PanelContainerListener panelListener = new PanelContainerListener() {
+        @Override
+        public void panelAdded() {
+            panelContainer.scrollToEnd();
+        }
+
+        @Override
+        public void panelRemoved() {
+            // ignore
+        }
+    };
+
     @PostConstruct
     public void setupComponents() {
-        panelContainer.addPanelContainerListener(new PanelContainerListener() {
-            @Override
-            public void panelAdded() {
-                panelContainer.scrollToEnd();
-            }
-
-            @Override
-            public void panelRemoved() {
-                // ignore
-            }
-        });
+        panelContainer.addPanelContainerListener(panelListener);
 
         add(toolbar, BorderLayout.NORTH);
         add(panelContainer, BorderLayout.CENTER);
         add(messagePanel, BorderLayout.SOUTH);
+    }
+
+    @PreDestroy
+    public void destroy() {
+        panelContainer.removePanelContainerListener(panelListener);
     }
 
     @Override

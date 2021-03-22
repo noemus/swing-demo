@@ -1,22 +1,6 @@
 package app.mvc.messages;
 
-public final class Message {
-    private final Type type;
-    private final String text;
-
-    public Message(Type type, String text) {
-        this.type = type;
-        this.text = text;
-    }
-
-    public Type type() {
-        return type;
-    }
-
-    public String text() {
-        return text;
-    }
-
+public record Message(Type type, String text) {
     @Override
     public String toString() {
         return type.name() + ": " + text;

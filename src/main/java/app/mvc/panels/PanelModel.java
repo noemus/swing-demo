@@ -2,7 +2,6 @@ package app.mvc.panels;
 
 import org.springframework.stereotype.Component;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,35 +13,35 @@ import static java.util.Collections.unmodifiableList;
 
 @Component
 public class PanelModel {
-    private final List<Color> colors = new ArrayList<>();
+    private final List<Panel> panels = new ArrayList<>();
 
     private final List<PanelListener> listeners = new CopyOnWriteArrayList<>();
     private final AtomicBoolean suspendListeners = new AtomicBoolean(false);
 
-    public List<Color> getPanels() {
-        return unmodifiableList(colors);
+    public List<Panel> getPanels() {
+        return unmodifiableList(panels);
     }
 
-    public void addPanel(Color color) {
+    public void addPanel(Panel color) {
         addPanels(singletonList(color));
     }
 
-    public void addPanels(List<Color> addedColors) {
-        colors.addAll(addedColors);
+    public void addPanels(List<Panel> addedColors) {
+        panels.addAll(addedColors);
         firePanelsAdded(addedColors);
     }
 
-    public void removePanel(Color color) {
+    public void removePanel(Panel color) {
         removePanels(singletonList(color));
     }
 
-    public void removePanels(List<Color> removedColors) {
-        colors.removeAll(removedColors);
+    public void removePanels(List<Panel> removedColors) {
+        panels.removeAll(removedColors);
         firePanelsRemoved(removedColors);
     }
 
     public void clear() {
-        colors.clear();
+        panels.clear();
         firePanelsCleared();
     }
 
@@ -54,11 +53,11 @@ public class PanelModel {
         listeners.remove(listener);
     }
 
-    private void firePanelsAdded(List<Color> colors) {
+    private void firePanelsAdded(List<Panel> colors) {
         fireListeners(listener -> listener.panelsAdded(colors));
     }
 
-    private void firePanelsRemoved(List<Color> colors) {
+    private void firePanelsRemoved(List<Panel> colors) {
         fireListeners(listener -> listener.panelsRemoved(colors));
     }
 
@@ -74,8 +73,8 @@ public class PanelModel {
     }
 
     public interface PanelListener {
-        void panelsAdded(List<Color> colors);
-        void panelsRemoved(List<Color> colors);
+        void panelsAdded(List<Panel> colors);
+        void panelsRemoved(List<Panel> colors);
         void panelsCleared();
     }
 }
