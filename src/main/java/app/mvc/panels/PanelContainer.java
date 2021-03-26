@@ -43,16 +43,16 @@ public class PanelContainer extends JPanel implements PanelsUI {
     public void reset() {
         container.removeAll();
 
-        scrollPane.revalidate();
-        scrollPane.repaint();
+        container.revalidate();
+        container.repaint();
     }
 
     @Override
     public void addPanel(Panel panel) {
         addPanelInternal(panel);
 
-        scrollPane.revalidate();
-        scrollPane.repaint();
+        container.revalidate();
+        container.repaint();
 
         listeners.forEach(PanelContainerListener::panelAdded);
     }
@@ -63,12 +63,6 @@ public class PanelContainer extends JPanel implements PanelsUI {
 
         container.revalidate();
         container.repaint();
-
-        scrollPane.revalidate();
-        scrollPane.repaint();
-
-        revalidate();
-        repaint();
 
         listeners.forEach(PanelContainerListener::panelRemoved);
     }

@@ -18,7 +18,7 @@ import static javax.swing.JOptionPane.showConfirmDialog;
 
 @Service
 public class RandomPanelsController implements PanelController {
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
     @Autowired
     private PanelModel panelModel;
@@ -67,7 +67,7 @@ public class RandomPanelsController implements PanelController {
                               "Warning",
                               OK_CANCEL_OPTION) == OK_OPTION) {
             panelModel.clear();
-            messageController.showMessage("Panels cleared");
+            messageController.showWarning("Panels cleared");
         }
     }
 
@@ -80,10 +80,14 @@ public class RandomPanelsController implements PanelController {
             executorService.submit(() -> {
                 messageController.showMessage("Loading panels...");
 
-                panelModel.clear();
-                panelModel.addPanels(panelService.load());
-
-                messageController.showMessage("Panels loaded");
+                try {
+                    List<Panel> loadedPanels = panelService.load();
+                    panelModel.clear();
+                    panelModel.addPanels(loadedPanels);
+                    messageController.showMessage("Panels loaded");
+                } catch (Exception e) {
+                    messageController.showError("Panels load failed with: " + e.getMessage());
+                }
             });
         }
     }
@@ -92,10 +96,12 @@ public class RandomPanelsController implements PanelController {
     public void save() {
         executorService.submit(() -> {
             messageController.showMessage("Saving panels...");
-
-            panelService.save(panelModel.getPanels());
-
-            messageController.showMessage("Panels saved");
+            try {
+                panelService.save(panelModel.getPanels());
+                messageController.showMessage("Panels saved");
+            } catch (Exception e) {
+                messageController.showError("Panels save failed with: " + e.getMessage());
+            }
         });
 
     }
