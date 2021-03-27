@@ -7,12 +7,14 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 public class ColoredPanel extends JPanel {
-    private static final Dimension PANEL_SIZE = new Dimension(100, 100);
+
+    private static final Dimension PANEL_SIZE = new Dimension(74, 74);
 
     private final JPanel panel = new JPanel();
 
     public ColoredPanel(Color color, String label) {
         super(new BorderLayout());
+
         setPreferredSize(PANEL_SIZE);
         setMinimumSize(PANEL_SIZE);
         setMaximumSize(PANEL_SIZE);

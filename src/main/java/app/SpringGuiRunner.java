@@ -29,10 +29,13 @@ public class SpringGuiRunner {
     }
 
     public <T extends SpringGuiApp> void run(Class<T> appClass) {
-        SwingUtilities.invokeLater(() -> {
-            ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
-            context.registerShutdownHook();
-            context.getBean(appClass).start();
-        });
+        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
+        context.registerShutdownHook();
+        SwingUtilities.invokeLater(() -> context.getBean(appClass).start());
+    }
+
+    public <T extends SpringGuiApp> void runAsTest(Class<T> appClass) {
+        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
+        SwingUtilities.invokeLater(() -> context.getBean(appClass).start());
     }
 }

@@ -13,9 +13,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 @SwingComponent
 public class MainFrame extends JFrame implements SpringGuiApp {
+    private static final Logger LOGGER = Logger.getLogger(MainFrame.class.getSimpleName());
+
     private static final Dimension MINIMUM_SIZE = new Dimension(400, 240);
 
     public MainFrame(
@@ -23,6 +26,7 @@ public class MainFrame extends JFrame implements SpringGuiApp {
             @Value("${main.frame.width:800}") int width,
             @Value("${main.frame.height:240}") int height) {
         super(title);
+        LOGGER.fine("<init>");
 
         setSize(width, height);
         initLayout();
@@ -42,15 +46,11 @@ public class MainFrame extends JFrame implements SpringGuiApp {
         public void panelAdded() {
             panelContainer.scrollToEnd();
         }
-
-        @Override
-        public void panelRemoved() {
-            // ignore
-        }
     };
 
     @PostConstruct
     public void setupComponents() {
+        LOGGER.fine("setupComponents()");
         panelContainer.addPanelContainerListener(panelListener);
 
         add(toolbar, BorderLayout.NORTH);
@@ -65,6 +65,7 @@ public class MainFrame extends JFrame implements SpringGuiApp {
 
     @Override
     public void start() {
+        LOGGER.fine("start()");
         setVisible(true);
     }
 

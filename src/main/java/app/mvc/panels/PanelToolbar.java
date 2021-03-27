@@ -1,18 +1,21 @@
 package app.mvc.panels;
 
 import app.SwingComponent;
-import app.mvc.panels.PanelController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 @SwingComponent
 public class PanelToolbar extends JPanel {
+    private static final Logger LOGGER = Logger.getLogger(PanelToolbar.class.getSimpleName());
+
     @Autowired
     private PanelController panelController;
 
     public PanelToolbar() {
+        LOGGER.fine("<init>");
         setLayout(new FlowLayout());
 
         button("Add").addActionListener(event -> panelController.newPanel());

@@ -15,6 +15,7 @@ public class SwingScope implements Scope {
     public static final String SWING_SCOPE = "swing-scope";
 
     private final ConcurrentMap<String,Object> instances = new ConcurrentHashMap<>();
+    private final ConcurrentMap<String,Runnable> callbacks = new ConcurrentHashMap<>();
 
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
@@ -39,21 +40,31 @@ public class SwingScope implements Scope {
 
     @Override
     public Object remove(String name) {
+        try {
+            Runnable callback = callbacks.remove(name);
+            if (callback != null) {
+                System.out.println("Executing PreDestroy for " + name);
+                callback.run();
+            }
+        } catch (Exception e) {
+            //FIXME log warning
+            e.printStackTrace();
+        }
         return instances.remove(name);
     }
 
     @Override
     public void registerDestructionCallback(String name, Runnable runnable) {
-        // do nothing
+        callbacks.put(name, runnable);
     }
 
     @Override
     public Object resolveContextualObject(String name) {
-        return null;
+        return SWING_SCOPE;
     }
 
     @Override
     public String getConversationId() {
-        return null;
+        return SWING_SCOPE;
     }
 }

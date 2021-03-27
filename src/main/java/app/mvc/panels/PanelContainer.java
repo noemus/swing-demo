@@ -1,6 +1,7 @@
 package app.mvc.panels;
 
 import app.SwingComponent;
+import app.mvc.SGLayout;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -10,9 +11,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 @SwingComponent
 public class PanelContainer extends JPanel implements PanelsUI {
+    private static final Logger LOGGER = Logger.getLogger(PanelContainer.class.getSimpleName());
+
+    private final JPanel lhsPanel = new JPanel(new BorderLayout());
+    private final JPanel rhsPanel = new JPanel(new BorderLayout());
+
     private final JPanel container = new JPanel();
     private final ScrollPane scrollPane = new ScrollPane();
 
@@ -25,16 +32,40 @@ public class PanelContainer extends JPanel implements PanelsUI {
 
     public PanelContainer() {
         super();
+        LOGGER.fine("<init>");
     }
 
     @PostConstruct
     public void setup() {
-        setLayout(new BorderLayout());
+        LOGGER.fine("setup()");
+        SGLayout layout = new SGLayout(1, 3, SGLayout.CENTER, SGLayout.TOP, 1, 0);
+        layout.setAlignment(0, 1, SGLayout.FILL, SGLayout.TOP);
+        layout.setMargins(2, 2, 2, 2);
+        layout.setColumnScale(0, .2);
+        layout.setColumnScale(2, .2);
+        setLayout(layout);
 
         container.setLayout(new BoxLayout(container, BoxLayout.LINE_AXIS));
         scrollPane.add(container);
+        scrollPane.setPreferredSize(new Dimension(500, 120));
 
-        add(scrollPane, BorderLayout.CENTER);
+        Box lhsBox = Box.createVerticalBox();
+        JButton submit = new JButton("Submit");
+        submit.setMaximumSize(submit.getPreferredSize());
+        lhsBox.add(submit);
+        lhsBox.add(Box.createVerticalStrut(3));
+        JButton clear = new JButton("Clear");
+        clear.setMaximumSize(clear.getPreferredSize());
+        lhsBox.add(clear);
+        lhsPanel.add(lhsBox, BorderLayout.CENTER);
+        add(lhsPanel);
+
+        add(scrollPane);
+
+        JComboBox<String> comboBox = new JComboBox<>(new String[]{"Option 1", "Option 2"});
+        comboBox.setMaximumSize(comboBox.getPreferredSize());
+        rhsPanel.add(comboBox, BorderLayout.CENTER);
+        add(rhsPanel);
 
         panelModel.getPanels().forEach(this::addPanelInternal);
     }
@@ -100,6 +131,6 @@ public class PanelContainer extends JPanel implements PanelsUI {
 
     public interface PanelContainerListener {
         void panelAdded();
-        void panelRemoved();
+        default void panelRemoved() {}
     }
 }

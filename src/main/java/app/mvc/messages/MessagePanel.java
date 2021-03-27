@@ -4,6 +4,7 @@ import app.SwingComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 import static javax.swing.BorderFactory.createCompoundBorder;
 import static javax.swing.BorderFactory.createEmptyBorder;
@@ -11,10 +12,12 @@ import static javax.swing.BorderFactory.createMatteBorder;
 
 @SwingComponent
 public class MessagePanel extends JPanel implements MessageUI {
+    private static final Logger LOGGER = Logger.getLogger(MessagePanel.class.getSimpleName());
 
     private final JLabel messageLabel = new JLabel();
 
     public MessagePanel() {
+        LOGGER.fine("<init>");
         setLayout(new BorderLayout());
         setOpaque(true);
         setBackground(Color.WHITE);
